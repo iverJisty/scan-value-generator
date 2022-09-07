@@ -67,3 +67,9 @@ func (t SerializerType) Value() (driver.Value, error) {
 }
 ```
 
+## Ref
+
+* [dave/jennifer](https://github.com/dave/jennifer)
+* [gojuno/svgen](https://github.com/gojuno/svgen)
+* [stringer](https://cs.opensource.google/go/x/tools/+/master:cmd/stringer/)
+
