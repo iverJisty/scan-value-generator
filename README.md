@@ -1,7 +1,7 @@
 Scan Value Generator
 ===
 
-svgen search for the constants of types which are the aliases for string type, i.e.:
+`scan-value-generator` search for the constants of types which are the aliases for string type, i.e.:
 
 ```go
 package models
@@ -66,6 +66,9 @@ func (t SerializerType) Value() (driver.Value, error) {
         return string(t), nil
 }
 ```
+
+And create the generated file at `[origin-filepath]/[filename]_generated.go`
+
 
 ## Ref
 
