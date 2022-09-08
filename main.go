@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	. "github.com/dave/jennifer/jen"
 )
@@ -42,8 +43,7 @@ func GenFileHeader(pkgName string) *File {
 
 func AddSV(f *File, fileName, typeName string, kvPair map[string]string) error {
 
-	f.Commentf("Scan/Value for type \"%s\":", typeName)
-	f.Commentf("File locate at %s", fileName)
+	f.Commentf("Generated from type %s", typeName)
 
 	f.Func().Params(
 		Id("t").Op("*").Id(typeName),
@@ -128,8 +128,6 @@ func main() {
 		os.Exit(2)
 	}
 
-	f := GenFileHeader(*pkg)
-
 	fset := token.NewFileSet()
 	pkgs, _ := parser.ParseDir(fset, folderPath, nil, parser.DeclarationErrors)
 
@@ -201,16 +199,23 @@ func main() {
 
 				}
 
+				f := GenFileHeader(*pkg)
+
 				err := AddSV(f, fileName, typeName, kvPair)
 				if err != nil {
 					log.Printf("Generate Scan/Value for type %q failed", typeName)
 				}
+
+				generatedFileName := strings.Split(fileName, ".")[0] + "_generated.go"
+				err = f.Save(generatedFileName)
+				if err != nil {
+					log.Printf("Save file at location %s failed", fileName)
+				}
+
 				return true
 			})
 
 		}
 	}
-
-	f.Save(fmt.Sprintf("%s/%s_scanner_valuer_generated.go", folderPath, *pkg))
 
 }
