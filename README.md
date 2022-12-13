@@ -23,7 +23,7 @@ package models
 
 import (
         "database/sql/driver"
-        "fmt"
+        "github.com/pkg/errors"
 )
 
 // Scan/Value for type "SerializerType":
@@ -38,7 +38,7 @@ func (t *SerializerType) Scan(i interface{}) error {
         case string:
                 vv = SerializerType(v)
         default:
-                return fmt.Errorf("Cannot scan %T into %T", v, t)
+                return errors.Errorf("Cannot scan %T into %T", v, t)
         }
 
         switch vv {
@@ -46,7 +46,7 @@ func (t *SerializerType) Scan(i interface{}) error {
         case XML:
         case PROTOBUF3:
         default:
-                return fmt.Errorf("Invalid value of type SerializerType: %v", vv)
+                return errors.Errorf("Invalid value of type SerializerType: %v", vv)
         }
         *t = vv
         return nil
@@ -61,7 +61,7 @@ func (t SerializerType) Value() (driver.Value, error) {
         case XML:
         case PROTOBUF3:
         default:
-                return nil, fmt.Errorf("Invalid value of type SerializerType: %v", t)
+                return nil, errors.Errorf("Invalid value of type SerializerType: %v", t)
         }
         return string(t), nil
 }
